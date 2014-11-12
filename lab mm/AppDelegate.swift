@@ -24,26 +24,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
     
-    func factorial(var value: Int) -> Float {
+    func factorial(var value: Float) -> Float {
         
-        var result:Float = 1
-        for i in 1...value
+        if (value < 0) // если пользователь ввел отрицательное число
         {
-            result = result * Float(i);
+            return 0 // возвращаем ноль
         }
-        
-        return (result)
+        else if (value == 0) // если пользователь ввел ноль,
+        {
+            
+            return 1 // возвращаем факториал от нуля - не удивляетесь, но это 1 =)
+        }
+        else // Во всех остальных случаях
+        {
+            return (value * factorial(value - 1)) // делаем рекурсию.
+        }
     }
     
-    func summ(var p: Float, var x:Int) -> Float {
-        
+    func summ(var p: Float, v: Float) -> Float {
         var result:Float = 0
-        for i in 1...x
-        {
-            result = result + (Float(p) / factorial(x))
+        for i in 0 ... Int(v) {
+            result = result + pow(p,Float(i)) / factorial(Float(i))
         }
         
-        return (result)
+        return result
     }
 
     @IBAction func btnResult(sender: AnyObject) {
@@ -51,8 +55,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var v = vFloat.floatValue
         
         
-        //pvResult.floatValue = (Float((p) / (factorial(Int(v))))) / summ(p, x: Int(v))
-        pvResult.floatValue = pow(3, 3)
+        pvResult.floatValue = (p / (factorial(v))) / summ(p, v: v)
+        //pvResult.floatValue = pow(3, 3)
         
     }
 }
