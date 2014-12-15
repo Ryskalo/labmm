@@ -11,6 +11,8 @@
 		FB2012E319F11D34007B9F3E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB2012E219F11D34007B9F3E /* Images.xcassets */; };
 		FB2012E619F11D34007B9F3E /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = FB2012E419F11D34007B9F3E /* MainMenu.xib */; };
 		FB2012F219F11D35007B9F3E /* lab_mmTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2012F119F11D35007B9F3E /* lab_mmTests.swift */; };
+		FBB1EC6B1A3F1A1E0035261C /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = FBB1EC6A1A3F1A1E0035261C /* index.html */; };
+		FBB1EC6D1A3F8A590035261C /* chart.js in Resources */ = {isa = PBXBuildFile; fileRef = FBB1EC6C1A3F8A590035261C /* chart.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,8 @@
 		FB2012EB19F11D34007B9F3E /* lab mmTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "lab mmTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB2012F019F11D34007B9F3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FB2012F119F11D35007B9F3E /* lab_mmTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lab_mmTests.swift; sourceTree = "<group>"; };
+		FBB1EC6A1A3F1A1E0035261C /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		FBB1EC6C1A3F8A590035261C /* chart.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = chart.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +78,8 @@
 			isa = PBXGroup;
 			children = (
 				FB2012E019F11D34007B9F3E /* AppDelegate.swift */,
+				FBB1EC6C1A3F8A590035261C /* chart.js */,
+				FBB1EC6A1A3F1A1E0035261C /* index.html */,
 				FB2012E219F11D34007B9F3E /* Images.xcassets */,
 				FB2012E419F11D34007B9F3E /* MainMenu.xib */,
 				FB2012DE19F11D34007B9F3E /* Supporting Files */,
@@ -186,6 +192,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FBB1EC6B1A3F1A1E0035261C /* index.html in Resources */,
+				FBB1EC6D1A3F8A590035261C /* chart.js in Resources */,
 				FB2012E319F11D34007B9F3E /* Images.xcassets in Resources */,
 				FB2012E619F11D34007B9F3E /* MainMenu.xib in Resources */,
 			);
@@ -393,6 +401,7 @@
 				FB2012F719F11D35007B9F3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB2012F819F11D35007B9F3E /* Build configuration list for PBXNativeTarget "lab mmTests" */ = {
 			isa = XCConfigurationList;
@@ -401,6 +410,7 @@
 				FB2012FA19F11D35007B9F3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
