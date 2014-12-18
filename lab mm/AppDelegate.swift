@@ -8,6 +8,8 @@
 
 import Cocoa
 import WebKit
+//import AppKit
+//import Foundation
 //import WKWebView
 
 @NSApplicationMain
@@ -18,14 +20,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var vFloat: NSTextField!
     @IBOutlet weak var pvResult: NSTextField!
     @IBOutlet weak var wChart: WebView!
+    @IBOutlet weak var myTableView: NSTableView!
+    @IBOutlet weak var arrayController: NSArrayController!
     
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
+        
+        var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html")
+        
+        var url = NSURL(fileURLWithPath:resourcesPath!)
+        
+        let htmlContent = NSMutableString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)
+        
+        let pkStr = "1, 1, 1, 1, 1"
+        
+        let points = "\"1\", \"2\", \"3\", \"4\", \"5\""
+        
+        htmlContent?.insertString(pkStr, atIndex: 701)
+        htmlContent?.insertString(points, atIndex: 379)
+        
+        self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)
+        
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+
     }
     
     func factorial(var value: Float) -> Float {
@@ -58,45 +77,65 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var p = pFloat.floatValue
         var v = vFloat.floatValue
         
-        var pv = (p / (factorial(v))) / summ(p, v: v)
+        var pv = (pow(p, v) / (factorial(v))) / summ(p, v: v)
         
         pvResult.floatValue = pv
         
-        if (pv == 0)
+        if ((pv == 0) || (p == 0) || (v == 0))
         {
-            pvResult.stringValue = "Введите корректные значения"
+            pvResult.stringValue = "incorrect value"
         }
+        
+        //var threeDoubles = [Double](count: 3, repeatedValue: 0.0)
+       // var dic:[String:String] = ["demoKey":"name","name1":"name1"]
+        //dic["name"] = "tony"
+        //arrayController.addObject(dic)
+        
+        var pk = [Float]()
+        var pkStr:String = ""
+        var a:Float = 0
+        
+        for i in 0 ... Int(v) {
+            a = (pow(p, Float(i))/factorial(Float(i))) / (summ(p, v: Float(i)))
+            pk.insert(a, atIndex: i)
+            //println(pk[i])
+            
+            if (i == Int(v)){
+                pkStr += "\(a)"
+            }
+            else {
+                pkStr += "\(a), "
+            }
+        }
+        
+        var points:String = ""
+        var i = 1
+        
+        for i in 1...Int(v){
+            if (i == Int(v)) {
+               points += "\"" + String(i) + "\""
+            }
+            else {
+                points += "\"" + String(i) + "\", "
+            }
+        }
+        
+        //var indexPk = 699 + 5 * Int(v)
+        
+        //println(pk)
         
         var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html")
         
-        //var htmlPath = resourcesPath!.stringByAppendingString("/index.html")
-        
         var url = NSURL(fileURLWithPath:resourcesPath!)
         
-        //var request = NSURLRequest(URL: url!)
+        let htmlContent = NSMutableString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)
         
-        
-        let htmlContent = NSString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)
-        
-        //println(htmlContent)
+        htmlContent?.insertString(pkStr, atIndex: 701)
+        htmlContent?.insertString(points, atIndex: 379)
         
         self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)
-        
-        //self.wChart.frameLoadDelegate = self
-        //self.wChart.mainFrame.loadRequest(request)
-        
-        
-        /*
-NSString* filePath = [[NSBundle mainBundle] pathForResource: @"index" ofType: @"html"];
-NSURL *url = [NSURL fileURLWithPath:[filePath stringByDeletingLastPathComponent]];
-[[self.webView mainFrame] loadHTMLString: [NSString stringWithContentsOfFile: filePath] baseURL: url];
-*/
+    
 
     }
     
-    func userContentController(userContentController: WKUserContentController!,didReceiveScriptMessage message: WKScriptMessage!) {
-        if(message.name == "callbackHandler") {
-            println("JavaScript is sending a message \(message.body)")
-        }
-    }
 }
