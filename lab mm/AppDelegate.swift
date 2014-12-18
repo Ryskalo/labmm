@@ -8,9 +8,6 @@
 
 import Cocoa
 import WebKit
-//import AppKit
-//import Foundation
-//import WKWebView
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -20,59 +17,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var vFloat: NSTextField!
     @IBOutlet weak var pvResult: NSTextField!
     @IBOutlet weak var wChart: WebView!
-    @IBOutlet weak var myTableView: NSTableView!
+    @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var arrayController: NSArrayController!
     
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
-        
-        var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html")
-        
-        var url = NSURL(fileURLWithPath:resourcesPath!)
-        
-        let htmlContent = NSMutableString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)
-        
-        let pkStr = "1, 1, 1, 1, 1"
-        
-        let points = "\"1\", \"2\", \"3\", \"4\", \"5\""
-        
-        htmlContent?.insertString(pkStr, atIndex: 701)
-        htmlContent?.insertString(points, atIndex: 379)
-        
-        self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)
-        
-    }
-
-    func applicationWillTerminate(aNotification: NSNotification) {
-
-    }
-    
-    func factorial(var value: Float) -> Float {
-        
-        if (value < 0) // если пользователь ввел отрицательное число
-        {
-            return 0 // возвращаем ноль
-        }
-        else if (value == 0) // если пользователь ввел ноль,
-        {
-            
-            return 1 // возвращаем факториал от нуля - не удивляетесь, но это 1 =)
-        }
-        else // Во всех остальных случаях
-        {
-            return (value * factorial(value - 1)) // делаем рекурсию.
-        }
-    }
-    
-    func summ(var p: Float, v: Float) -> Float {
-        var result:Float = 0
-        for i in 0 ... Int(v) {
-            result = result + pow(p,Float(i)) / factorial(Float(i))
-        }
-        
-        return result
-    }
-
     @IBAction func btnResult(sender: AnyObject) {
         var p = pFloat.floatValue
         var v = vFloat.floatValue
@@ -86,19 +34,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             pvResult.stringValue = "incorrect value"
         }
         
-        //var threeDoubles = [Double](count: 3, repeatedValue: 0.0)
-       // var dic:[String:String] = ["demoKey":"name","name1":"name1"]
-        //dic["name"] = "tony"
-        //arrayController.addObject(dic)
+    }
+    
+    
+    
+    @IBAction func btnPT(sender: AnyObject) {
+        arrayController.content?.removeAllObjects()
+        
+        var p = pFloat.floatValue
+        var v = vFloat.floatValue
         
         var pk = [Float]()
         var pkStr:String = ""
         var a:Float = 0
         
+        var dic:[String:String]
+        
         for i in 0 ... Int(v) {
-            a = (pow(p, Float(i))/factorial(Float(i))) / (summ(p, v: Float(i)))
+            a = Float((pow(p, Float(i))/factorial(Float(i))) / (summ(p, v: Float(i))))
             pk.insert(a, atIndex: i)
-            //println(pk[i])
             
             if (i == Int(v)){
                 pkStr += "\(a)"
@@ -106,24 +60,73 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             else {
                 pkStr += "\(a), "
             }
+            dic = ["x":"\(i)","pk":"\(a)"]
+            arrayController.addObject(dic)
         }
         
         var points:String = ""
         var i = 1
         
-        for i in 1...Int(v){
+        for i in 0...Int(v){
             if (i == Int(v)) {
-               points += "\"" + String(i) + "\""
+                points += "\"" + String(i) + "\""
             }
             else {
                 points += "\"" + String(i) + "\", "
             }
         }
         
-        //var indexPk = 699 + 5 * Int(v)
+        buildChart(pkStr, points: points)
+    }
+    
+    
+    func applicationDidFinishLaunching(aNotification: NSNotification) {
         
-        //println(pk)
+        let pkStr = "1, 1, 1, 1, 1"
         
+        let points = "\"1\", \"2\", \"3\", \"4\", \"5\""
+        
+        buildChart(pkStr, points: points)
+        
+    }
+
+    
+    
+    func applicationWillTerminate(aNotification: NSNotification) {
+
+    }
+    
+    
+    
+    func factorial(var value: Float) -> Float {
+        
+        if (value < 0)
+        {
+            return 0
+        }
+        else if (value == 0)
+        {
+            
+            return 1
+        }
+        else
+        {
+            return (value * factorial(value - 1))
+        }
+    }
+    
+    
+    
+    func summ(var p: Float, v: Float) -> Float {
+        var result:Float = 0
+        for i in 0 ... Int(v) {
+            result = result + pow(p,Float(i)) / factorial(Float(i))
+        }
+        
+        return result
+    }
+    
+    func buildChart(var pkStr: String , points: String) {
         var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html")
         
         var url = NSURL(fileURLWithPath:resourcesPath!)
@@ -134,8 +137,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         htmlContent?.insertString(points, atIndex: 379)
         
         self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)
-    
-
     }
     
 }
