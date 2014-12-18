@@ -33,7 +33,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         {
             pvResult.stringValue = "incorrect value"
         }
-        
     }
     
     
@@ -51,7 +50,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var dic:[String:String]
         
         for i in 0 ... Int(v) {
-            a = Float((pow(p, Float(i))/factorial(Float(i))) / (summ(p, v: Float(i))))
+            a = Float((pow(p, Float(i+1))/factorial(Float(i+1))) / (summ(p, v: Float(v))))
             pk.insert(a, atIndex: i)
             
             if (i == Int(v)){
