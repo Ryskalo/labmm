@@ -29,9 +29,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         pvResult.floatValue = pv                              //Выводим результат в поле Pv
         
-        if ((pv == 0) || (p == 0) || (v == 0))
-        {
-            pvResult.stringValue = "incorrect value"           //Проверка на символы
+        if (checkValue(p, v: v)) {
+            pvResult.floatValue = pv
+        }
+        else {
+            pvResult.stringValue = "incorrect value"
         }
     }
     
@@ -43,36 +45,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         var p = pFloat.floatValue
         var v = vFloat.floatValue
         
-        var pkStr:String = ""
-        var a:Float = 0
-        var dic:[String:String]
-        
-        for i in 0 ... Int(v) {
-            a = Float((pow(p, Float(i+1))/factorial(Float(i+1))) / (summ(p, v: Float(v))))      //Рассчет массива Pk
+        if (checkValue(p, v: v))
+        {
+            var pkStr:String = ""
+            var a:Float = 0
+            var dic:[String:String]
             
-            if (i == Int(v)){                                   //Создание строки с элементами массива Pk
-                pkStr += "\(a)"
+            for i in 0 ... Int(v) {
+                a = Float((pow(p, Float(i+1))/factorial(Float(i+1))) / (summ(p, v: Float(v))))      //Рассчет массива Pk
+                
+                if (i == Int(v)){                                   //Создание строки с элементами массива Pk
+                    pkStr += "\(a)"
+                }
+                else {
+                    pkStr += "\(a), "
+                }
+                dic = ["x":"\(i)","pk":"\(a)"]
+                arrayController.addObject(dic)                      //Вывод элементов массива Pk в таблицу
             }
-            else {
-                pkStr += "\(a), "
+            
+            var points:String = ""
+            var i = 1
+            
+            for i in 0...Int(v){                                    //Создание строки с нумерацией для графика
+                if (i == Int(v)) {
+                    points += "\"" + String(i) + "\""
+                }
+                else {
+                    points += "\"" + String(i) + "\", "
+                }
             }
-            dic = ["x":"\(i)","pk":"\(a)"]
-            arrayController.addObject(dic)                      //Вывод элементов массива Pk в таблицу
+            
+            buildChart(pkStr, points: points)                       //Вызов функции построения графика
+        }
+        else
+        {
+            pvResult.stringValue = "incorrect value"
         }
         
-        var points:String = ""
-        var i = 1
-        
-        for i in 0...Int(v){                                    //Создание строки с нумерацией для графика
-            if (i == Int(v)) {
-                points += "\"" + String(i) + "\""
-            }
-            else {
-                points += "\"" + String(i) + "\", "
-            }
-        }
-        
-        buildChart(pkStr, points: points)                       //Вызов функции построения графика
     }
     
     
@@ -121,6 +131,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         return result
     }
+    
+    
+    
+    func checkValue(var p:Float, v:Float ) -> Bool {            //функция проверки значений
+        if ((p == 0) || (v == 0) || (p > v)) {
+            return false
+        }
+        else {
+            return true
+        }
+    }
+    
+    
     
     func buildChart(var pkStr: String , points: String) {    //Функция построения графика
         var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html") //Указываем путь к html файлу с вызовом библиотеки для графиков
