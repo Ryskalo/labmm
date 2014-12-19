@@ -21,52 +21,49 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var arrayController: NSArrayController!
     
     
-    @IBAction func btnResult(sender: AnyObject) {
+    @IBAction func btnResult(sender: AnyObject) {               //Реализация после нажатия кнопки "Calculate"
         var p = pFloat.floatValue
         var v = vFloat.floatValue
         
-        var pv = (pow(p, v) / (factorial(v))) / summ(p, v: v)
+        var pv = (pow(p, v) / (factorial(v))) / summ(p, v: v) //Рассчет Pv
         
-        pvResult.floatValue = pv
+        pvResult.floatValue = pv                              //Выводим результат в поле Pv
         
         if ((pv == 0) || (p == 0) || (v == 0))
         {
-            pvResult.stringValue = "incorrect value"
+            pvResult.stringValue = "incorrect value"           //Проверка на символы
         }
     }
     
     
     
-    @IBAction func btnPT(sender: AnyObject) {
-        arrayController.content?.removeAllObjects()
+    @IBAction func btnPT(sender: AnyObject) {                   //Реализация после нажатия кнопки "Plot & Table"
+        arrayController.content?.removeAllObjects()             //Удаление из таблицы всех элементов
         
         var p = pFloat.floatValue
         var v = vFloat.floatValue
         
-        var pk = [Float]()
         var pkStr:String = ""
         var a:Float = 0
-        
         var dic:[String:String]
         
         for i in 0 ... Int(v) {
-            a = Float((pow(p, Float(i+1))/factorial(Float(i+1))) / (summ(p, v: Float(v))))
-            pk.insert(a, atIndex: i)
+            a = Float((pow(p, Float(i+1))/factorial(Float(i+1))) / (summ(p, v: Float(v))))      //Рассчет массива Pk
             
-            if (i == Int(v)){
+            if (i == Int(v)){                                   //Создание строки с элементами массива Pk
                 pkStr += "\(a)"
             }
             else {
                 pkStr += "\(a), "
             }
             dic = ["x":"\(i)","pk":"\(a)"]
-            arrayController.addObject(dic)
+            arrayController.addObject(dic)                      //Вывод элементов массива Pk в таблицу
         }
         
         var points:String = ""
         var i = 1
         
-        for i in 0...Int(v){
+        for i in 0...Int(v){                                    //Создание строки с нумерацией для графика
             if (i == Int(v)) {
                 points += "\"" + String(i) + "\""
             }
@@ -75,17 +72,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
         
-        buildChart(pkStr, points: points)
+        buildChart(pkStr, points: points)                       //Вызов функции построения графика
     }
     
     
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(aNotification: NSNotification) {     //Действие после запуска программы
         
-        let pkStr = "1, 1, 1, 1, 1"
+        let pkStr = "1, 1, 1, 1, 1"                             //Задаем значения графика при запуске программы
         
         let points = "\"1\", \"2\", \"3\", \"4\", \"5\""
         
-        buildChart(pkStr, points: points)
+        buildChart(pkStr, points: points)                       //Вызов функции построения графика
         
     }
 
@@ -97,7 +94,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func factorial(var value: Float) -> Float {
+    func factorial(var value: Float) -> Float {             //Функция для рассчета факториала
         
         if (value < 0)
         {
@@ -116,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     
     
-    func summ(var p: Float, v: Float) -> Float {
+    func summ(var p: Float, v: Float) -> Float {           //Функция рассчета суммы
         var result:Float = 0
         for i in 0 ... Int(v) {
             result = result + pow(p,Float(i)) / factorial(Float(i))
@@ -125,17 +122,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         return result
     }
     
-    func buildChart(var pkStr: String , points: String) {
-        var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html")
+    func buildChart(var pkStr: String , points: String) {    //Функция построения графика
+        var resourcesPath = NSBundle.mainBundle().pathForResource("index", ofType: "html") //Указываем путь к html файлу с вызовом библиотеки для графиков
         
-        var url = NSURL(fileURLWithPath:resourcesPath!)
+        var url = NSURL(fileURLWithPath:resourcesPath!)                                     //Создаем ссылку на html файл
         
-        let htmlContent = NSMutableString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)
+        let htmlContent = NSMutableString(contentsOfURL: url!, encoding: NSUTF8StringEncoding, error:nil)   //Считываем html файл в строковую переменную
         
-        htmlContent?.insertString(pkStr, atIndex: 701)
-        htmlContent?.insertString(points, atIndex: 379)
+        htmlContent?.insertString(pkStr, atIndex: 701)                                  //Вставляем строку с массивом Pk в считанный html код
+        htmlContent?.insertString(points, atIndex: 379)                                 //Вставляем строку с нумерацией графика
         
-        self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)
+        self.wChart.mainFrame.loadHTMLString(htmlContent, baseURL: url)                 //Выводим полученный html код в элемент WebView
     }
     
 }
